@@ -5,13 +5,37 @@ import json
 from dotenv import load_dotenv
 import os
 from db_control import crud, mymodels
+from module import mdlQuestions,mdlAssessment,mdlArea,mdlHello
 import requests
 import openai
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": os.getenv('ORIGINS')}})   # CORS設定を更新
+CORS(app)
+# CORS(app, resources={r"/api/*": {"origins": os.getenv('ORIGINS')}})   # CORS設定を更新
 
-@app.route('/api/requestGpt', methods=['POST'])
+@app.route("/allQuestions", methods=['GET'])
+def read_all_questions():
+    data = request.get_json()  # JSONデータを取得
+    if data is None:
+        return jsonify({"error": "Invalid JSON"}), 400
+    return mdlQuestions.getAll(data), 200
+
+@app.route("/doAssessment", methods=['POST'])
+def do_assessment():
+    data = request.get_json()  # JSONデータを取得
+    if data is None:
+        return jsonify({"error": "Invalid JSON"}), 400
+    return mdlAssessment.do(data), 200
+
+@app.route("/doResult", methods=['POST'])
+def do_result():
+    data = request.get_json()  # JSONデータを取得
+    if data is None:
+        return jsonify({"error": "Invalid JSON"}), 400
+    return mdlArea.do(data), 200
+
+### Sample/Test ###
+@app.route('/requestGpt', methods=['POST'])
 def requestGpt():
 
     print("requestGpt")
@@ -37,17 +61,19 @@ def requestGpt():
     output_content = response.choices[0].message.content.strip()
     return jsonify({"message": f"{output_content}"})
 
-@app.route('/', methods=['GET'])
+
+@app.route('/subHello', methods=['GET'])
 def hello():
-    return jsonify({'message': 'Flask start!'})
+    return mdlHello.Hello()
 
-@app.route('/api/hello', methods=['GET'])
+@app.route('/hello', methods=['GET'])
 def hello_world():
-    load_dotenv(override=True)
-    # backend.env確認
-    return jsonify(message=os.getenv('TEST_ENV'))
+    return mdlHello.Hello()
+    # load_dotenv(override=True)
+    # # backend.env確認
+    # return jsonify(message=os.getenv('TEST_ENV'))
 
-@app.route('/api/multiply/<int:id>', methods=['GET'])
+@app.route('/multiply/<int:id>', methods=['GET'])
 def multiply(id):
     # print("multiply")
     # idの2倍の数を計算
@@ -58,7 +84,7 @@ def multiply(id):
     print(result)
     return result, 200
 
-@app.route('/api/echo', methods=['POST'])
+@app.route('/echo', methods=['POST'])
 def echo():
     print("echo")
     data = request.get_json()  # JSONデータを取得
