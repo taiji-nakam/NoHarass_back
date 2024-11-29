@@ -13,13 +13,12 @@ app = Flask(__name__)
 CORS(app)
 # CORS(app, resources={r"/api/*": {"origins": os.getenv('ORIGINS')}})   # CORS設定を更新
 
+# 全ての質問データを取得
 @app.route("/allQuestions", methods=['GET'])
 def read_all_questions():
-    data = request.get_json()  # JSONデータを取得
-    if data is None:
-        return jsonify({"error": "Invalid JSON"}), 400
-    return mdlQuestions.getAll(data), 200
+    return mdlQuestions.getAll(), 200
 
+# アセスメント実施
 @app.route("/doAssessment", methods=['POST'])
 def do_assessment():
     data = request.get_json()  # JSONデータを取得
@@ -27,6 +26,7 @@ def do_assessment():
         return jsonify({"error": "Invalid JSON"}), 400
     return mdlAssessment.do(data), 200
 
+# おすすめエリア生成
 @app.route("/doResult", methods=['POST'])
 def do_result():
     data = request.get_json()  # JSONデータを取得

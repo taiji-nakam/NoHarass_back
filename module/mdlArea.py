@@ -18,6 +18,7 @@ def do(data):
     # おすすめエリアをDBに登録
 
     # 結果を構成
+    print("4 OK")
 
     return jsonify({'message': '[dummy]Assessment Result'})
 
