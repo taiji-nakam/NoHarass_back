@@ -1,12 +1,42 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from datetime import datetime
- 
 
 class Base(DeclarativeBase):
     pass
 
+class assessment(Base):
+    __tablename__ = 'assessment'
+    assessment_id:Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    assessment_datetime:Mapped[str] = mapped_column()
+    # MySQL変更時に沼りそうなのでdatetimeは使わずStrで実装始める
 
+class assessment_answer(Base):
+    __tablename__ = 'assessment_answer'
+    assessment_id:Mapped[str] = mapped_column(ForeignKey("assessment.assessment_id"), primary_key=True)
+    question_id:Mapped[int] = mapped_column(primary_key=True)
+    answer:Mapped[int] = mapped_column()
+
+class assessment_result(Base):
+    __tablename__ = 'assessment_result'
+    assessment_id:Mapped[str] = mapped_column(ForeignKey("assessment.assessment_id"), primary_key=True)
+    category:Mapped[str] = mapped_column(primary_key=True)
+    priority:Mapped[int] = mapped_column()
+
+class basic_info(Base):
+    __tablename__ = 'basic_info'
+    assessment_id:Mapped[str] = mapped_column(ForeignKey("assessment.assessment_id"), primary_key=True)
+    age_group:Mapped[str] = mapped_column()
+    country_origin:Mapped[str] = mapped_column()
+    nearest_station:Mapped[str] = mapped_column()
+    budget_lower_limit:Mapped[int] = mapped_column()
+    budget_upper_limit:Mapped[int] = mapped_column()
+    area_fg_smaller:Mapped[int] = mapped_column()
+    area_fg_average:Mapped[int] = mapped_column()
+    area_fg_larger:Mapped[int] = mapped_column()
+    # MySQL変更時に沼りそうなのでboolは使わずint(0:no,1:yes)で実装始める
+
+# # TEST Table
 class Customers(Base):
     __tablename__ = 'customers'
     customer_id:Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
