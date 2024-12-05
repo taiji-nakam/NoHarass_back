@@ -26,6 +26,17 @@ def do_assessment():
         return jsonify({"error": "Invalid JSON"}), 400
     return mdlAssessment.do(data), 200
 
+# アセスメント結果取得
+@app.route("/assessmentResult", methods=['GET'])
+def get_assessment():
+    # クエリパラメータから assessmentId を取得
+    assessmentId = request.args.get('assessmentId', type=int)
+    print('assessmentId:')
+    print(assessmentId)
+    if assessmentId is None:
+        return {"error": "Missing or invalid assessmentId"}, 400
+    return mdlAssessment.getResult(assessmentId), 200
+
 # おすすめエリア生成
 @app.route("/doResult", methods=['POST'])
 def do_result():
