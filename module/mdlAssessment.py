@@ -11,11 +11,20 @@ def do(data):
     new_assessment_id = crud.insert_assessment()
 
     # 診断回答をDBに登録
-
-
-    # 診断結果をDBに登録
-    categoryAverages = data['categoryAverages']
+    #TODO:questionValues(questionId：value)が渡されたら登録実装
     
+    # 診断結果をDBに登録
+    result_to_insert = [
+        mymodels.assessment_result(
+            assessment_id=new_assessment_id,
+            category=category,
+            priority=priority
+        )
+        for category, priority in data['categoryAverages'].items()
+    ]
+    # 登録処理
+    insert_cnt = crud.myinsert_all(result_to_insert)
+
     return jsonify({'assessment_id': new_assessment_id})
 
 def getResult(assessmentId):
