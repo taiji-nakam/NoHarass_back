@@ -52,6 +52,16 @@ def Hello():
     # [db Sample] assessment_resultデータを取得、基礎情報と合わせてgptにおすすエリアを提案してもらう
     result = crud.select_assessment_result(new_assessment_id)
     message = message + f"[select_assessment_result]{json.dumps(result, sort_keys=True)}\n "
-     
+
+    ### mdlArea.pyで使う ###
+    # [db Sample] area_resultテーブルへInsert
+    area_result_to_insert = mymodels.area_result(
+        assessment_id = new_assessment_id,
+        recommended = "東京 渋谷区",
+        note = "おススメエリア：渋谷区の説明文です"
+    )
+    insert_cnt = crud.myinsert(area_result_to_insert)
+    message = message + f"[insert to area_result]row{insert_cnt}\n "
+
     # message = 'Hello from sub module!'
     return jsonify({'message': message})

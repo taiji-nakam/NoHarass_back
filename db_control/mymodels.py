@@ -36,6 +36,12 @@ class basic_info(Base):
     area_fg_larger:Mapped[int] = mapped_column()
     # MySQL変更時に沼りそうなのでboolは使わずint(0:no,1:yes)で実装始める
 
+class area_result(Base):
+    __tablename__ = 'area_result'
+    assessment_id:Mapped[str] = mapped_column(ForeignKey("assessment.assessment_id"), primary_key=True)
+    recommended:Mapped[str] = mapped_column()
+    note:Mapped[str] = mapped_column()
+
 # # TEST Table
 class Customers(Base):
     __tablename__ = 'customers'
