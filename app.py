@@ -8,6 +8,7 @@ from db_control import crud, mymodels
 from module import mdlQuestions,mdlAssessment,mdlArea,mdlHello
 import requests
 import openai
+from os import environ
 
 app = Flask(__name__)
 CORS(app)
@@ -106,4 +107,6 @@ def echo():
     return jsonify({"message": f"echo: {message}"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Azure Webアプリで動作するためのポート設定
+    pPort = int(environ.get("PORT", 8000))  # Azureが設定するポートを取得
+    app.run(debug=True,port=pPort)
