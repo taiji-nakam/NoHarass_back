@@ -4,10 +4,6 @@ from flask import jsonify
 from db_control import crud, mymodels
 from flask import Flask, request
 
-def some_function():
-    from module.mdlAssessment import do, getResult
-
-
 def do(data):
     # dataから質問回答を取得
     print(data)
