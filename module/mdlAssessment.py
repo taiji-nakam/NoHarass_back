@@ -2,6 +2,9 @@
 
 from flask import jsonify
 from db_control import crud, mymodels
+from flask import Flask, request
+from mdlAssessment import do, getResult
+
 
 def do(data):
     # dataから質問回答を取得
@@ -33,3 +36,17 @@ def getResult(assessmentId):
     print(assessmentId)
     # 診断結果取得
     return crud.select_assessment_result(assessmentId)
+    # 結果をJSON形式で返却
+    return jsonify(results)
+
+app = Flask(__name__)
+
+@app.route('/doAssessment', methods=['POST'])
+def do_assessment():
+    data = request.json
+    return do(data)
+
+@app.route('/assessmentResult', methods=['GET'])
+def assessment_result():
+    assessment_id = request.args.get('assessmentId')
+    return getResult(assessment_id)
