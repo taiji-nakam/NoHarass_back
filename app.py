@@ -108,5 +108,5 @@ def echo():
 
 if __name__ == '__main__':
     # Azure Webアプリで動作するためのポート設定
-    # port = int(environ.get("PORT", 8000))  # Azureが設定するポートを取得
-    app.run(debug=True)
+    port = int(environ.get("PORT", 8000))  # Azureが設定するポートを取得
+    app.run(host="0.0.0.0", port=port,debug=True)
